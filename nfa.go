@@ -68,6 +68,18 @@ func poregtonfa(pofix string) *nfa {
 			frag.accept.edge2 = &accept
 			// append a new pointer to an nfa struct that represents the new nfa (frag1 + frag2)
 			nfastack = append(nfastack, &nfa{initial: &initial, accept: &accept})
+		case '+':
+			// pop the top item off the stack
+			frag := nfastack[len(nfastack)-1]
+			nfastack = nfastack[:len(nfastack)-1]
+			// create a new accept state variable
+			accept := state{}
+			// make edge1 initial state of fragment and edge2 point at the new accept state
+			initial := state{edge1: frag.initial, edge2: &accept}
+			frag.accept.edge1 = &initial
+			// push the new fragment to the stack
+			nfastack = append(nfastack, &nfa{initial: frag.initial, accept: &accept})
+
 		default:
 			accept := state{}
 			initial := state{symbol: r, edge1: &accept}

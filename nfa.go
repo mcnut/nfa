@@ -12,14 +12,7 @@ import (
 	"fmt"
 )
 
-/*
-
-// we need a data structure to store states and arrows.
-// essentially a linked list
-// then build a list of structs for each step
-
-
-*/
+// Store states and arrows.
 type state struct {
 	symbol rune
 	edge1  *state
@@ -85,7 +78,14 @@ func poregtonfa(pofix string) *nfa {
 	return nfastack[0]
 }
 
+//	Create a  function that takes a regex in postfix notation and any string and return true or false
+func pomatch(po string, s string) bool {
+	// create a default value set to false
+	ismatch := false
+
+	return ismatch
+}
+
 func main() {
-	nfa := poregtonfa("ab.c*|")
-	fmt.Println(nfa)
+	fmt.Println(pomatch("ab.c*", "cccc"))
 }

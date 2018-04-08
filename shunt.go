@@ -6,10 +6,6 @@ https://web.microsoftstream.com/video/9d83a3f3-bc4f-4bda-95cc-b21c8e67675e?chann
 
 package main
 
-import (
-	"fmt"
-)
-
 /*	Create a function to convert expressions from infix notation to postfix notation. */
 func intopost(infix string) string {
 	//	Create a map of the special characters and assign values to keep track of the precedence of the characters(i.e. * has a higher precedence than . which has precedence over |).
@@ -43,20 +39,4 @@ func intopost(infix string) string {
 	}
 	//	Cast pofix to a string
 	return string(pofix)
-}
-
-func main() {
-	//	Test program is working
-	// Answer: ab.c*.
-	fmt.Println("Infix:   ", "a.b.c*")
-	fmt.Println("Postfix: ", intopost("a.b.c*"))
-	// Answer: abd|.*
-	fmt.Println("Infix:   ", "(a.(b|d))*")
-	fmt.Println("Postfix: ", intopost("(a.(b|d))*"))
-	// Answer: abd|.c*.
-	fmt.Println("Infix:   ", "a.(b|d).c*")
-	fmt.Println("Postfix: ", intopost("a.(b|d).c*"))
-	// Answer: abb.+.c.
-	fmt.Println("Infix:   ", "a.(b.b)+.c")
-	fmt.Println("Postfix: ", intopost("a.(b.b)+.c"))
 }

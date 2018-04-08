@@ -2,10 +2,11 @@
 Author: Adrian McNulty
 Based on instructional video "go-thompson-final"
 https://web.microsoftstream.com/video/68a288f5-4688-4b3a-980e-1fcd5dd2a53b
+	Regex match function
+Based on instructional video "Regex match function"
+https://web.microsoftstream.com/video/bad665ee-3417-4350-9d31-6db35cf5f80d?channelId=f9970e30-b336-4145-8af3-a2bbe2938f5e&channelName=Graph%20Theory
 */
 
-// Use Thompson's Construction to build an nfa from a regular expression written in postfix notation
-// Using 3 special characters
 package main
 
 import (
@@ -78,14 +79,52 @@ func poregtonfa(pofix string) *nfa {
 	return nfastack[0]
 }
 
+func addState(l []*state, s *state, a *state) []*state {
+	l = append(l, s)
+
+	if s != a && s.symbol == 0 {
+		l = addState(l, s.edge1, a)
+		if s.edge2 != nil {
+			l = addState(l, s.edge2, a)
+		}
+	}
+	return l
+}
+
 //	Create a  function that takes a regex in postfix notation and any string and return true or false
 func pomatch(po string, s string) bool {
 	// create a default value set to false
 	ismatch := false
+	// Create a nfa from the regular expression
+	ponfa := poregtonfa(po)
+	// Create an array to keep track of the current states we are in in the nfa
+	current := []*state{}
+	// Create an array to keep track of the states we can move to
+	next := []*state{}
 
+	current = addState(current[:], ponfa.initial, ponfa.accept)
+
+	// Loop through string s
+	for _, r := range s {
+		// Loop through the current array
+		for _, c := range current {
+			if c.symbol == r {
+				next = addState(next[:], c.edge1, ponfa.accept)
+			}
+		}
+		// Replace the old states with new ones(i.e value of next becomes value of current and then next becomes empty array )
+		current, next = next, []*state{}
+	}
+
+	for _, c := range current {
+		if c == ponfa.accept {
+			ismatch = true
+			break
+		}
+	}
 	return ismatch
 }
 
 func main() {
-	fmt.Println(pomatch("ab.c*", "cccc"))
+	fmt.Println(pomatch("ab.c*|", "cccc"))
 }
